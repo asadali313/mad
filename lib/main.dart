@@ -55,9 +55,17 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: SizedBox(
-            width: 360,
-            child: loggedIn ? menuOptions(context) : loginForm(),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 350),
+            transitionBuilder: (child, animation) =>
+                FadeTransition(opacity: animation, child: child),
+            child: KeyedSubtree(
+              key: ValueKey(loggedIn),
+              child: SizedBox(
+                width: 360,
+                child: loggedIn ? menuOptions(context) : loginForm(),
+              ),
+            ),
           ),
         ),
       ),
@@ -117,8 +125,14 @@ class _LoginPageState extends State<LoginPage> {
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
                     const MenuPage(),
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
+                transitionsBuilder: (
+                  context,
+                  animation,
+                  secondaryAnimation,
+                  child,
+                ) => FadeTransition(opacity: animation, child: child),
+                transitionDuration: const Duration(milliseconds: 350),
+                reverseTransitionDuration: const Duration(milliseconds: 350),
               ),
             ),
             child: const Text('Cafe Menu'),
@@ -135,8 +149,14 @@ class _LoginPageState extends State<LoginPage> {
                     Scaffold(
                       body: CvPage(onBack: () => Navigator.pop(context)),
                     ),
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
+                transitionsBuilder: (
+                  context,
+                  animation,
+                  secondaryAnimation,
+                  child,
+                ) => FadeTransition(opacity: animation, child: child),
+                transitionDuration: const Duration(milliseconds: 350),
+                reverseTransitionDuration: const Duration(milliseconds: 350),
               ),
             ),
             child: const Text('View CV'),
