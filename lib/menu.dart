@@ -20,9 +20,12 @@ class MenuPage extends StatelessWidget {
   ];
 
   void orderTea(BuildContext context) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Your order is confirmed!')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Your order is confirmed!'),
+        animation: AlwaysStoppedAnimation(1),
+      ),
+    );
   }
 
   @override

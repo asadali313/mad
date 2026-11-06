@@ -114,7 +114,12 @@ class _LoginPageState extends State<LoginPage> {
           child: ElevatedButton(
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const MenuPage()),
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const MenuPage(),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
             ),
             child: const Text('Cafe Menu'),
           ),
@@ -125,10 +130,13 @@ class _LoginPageState extends State<LoginPage> {
           child: OutlinedButton(
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => Scaffold(
-                  body: CvPage(onBack: () => Navigator.pop(context)),
-                ),
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    Scaffold(
+                      body: CvPage(onBack: () => Navigator.pop(context)),
+                    ),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
               ),
             ),
             child: const Text('View CV'),
