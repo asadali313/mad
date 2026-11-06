@@ -11,20 +11,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:untitled5/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('shows tea menu and confirms an order', (tester) async {
+    await tester.pumpWidget(const CafeApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.enterText(find.byType(TextField).first, 'Asad');
+    await tester.enterText(find.byType(TextField).last, 'password');
+    await tester.tap(find.text('Log in'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cafe Menu'));
+    await tester.pumpAndSettle();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    expect(find.text('Green Tea'), findsOneWidget);
+    expect(find.text('Milk Tea'), findsOneWidget);
+    expect(find.text('Kashmiri Tea'), findsOneWidget);
+    expect(find.text('Black Tea'), findsOneWidget);
+    expect(find.text('Masala Tea'), findsOneWidget);
+
+    await tester.tap(find.text('Order').first);
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Your order is confirmed!'), findsOneWidget);
   });
 }

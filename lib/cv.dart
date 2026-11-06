@@ -8,7 +8,6 @@ class CvPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SafeArea(
     child: Column(
-      key: key,
       children: [
         Row(
           children: [
@@ -39,7 +38,7 @@ class CvPage extends StatelessWidget {
               Text(
                 'BS Software Engineering Student',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.black54),
               ),
               SizedBox(height: 16),
               Text(
@@ -95,7 +94,7 @@ class _Section extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            color: Color(0xFFB4A9FF),
+            color: Colors.brown,
             fontSize: 13,
             fontWeight: FontWeight.bold,
             letterSpacing: 1,
