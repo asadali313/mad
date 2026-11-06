@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'bottom_nav_bar.dart';
 import 'cv.dart';
 import 'menu.dart';
 
@@ -33,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   final nameController = TextEditingController();
   final passwordController = TextEditingController();
   bool loggedIn = false;
+  int selectedIndex = 0;
 
   @override
   void dispose() {
@@ -44,30 +46,58 @@ class _LoginPageState extends State<LoginPage> {
   void login() {
     if (nameController.text.trim().isNotEmpty &&
         passwordController.text.isNotEmpty) {
-      setState(() => loggedIn = true);
+      setState(() {
+        loggedIn = true;
+        selectedIndex = 0;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(loggedIn ? 'Welcome' : 'Cafe Login')),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 350),
-            transitionBuilder: (child, animation) =>
-                FadeTransition(opacity: animation, child: child),
-            child: KeyedSubtree(
-              key: ValueKey(loggedIn),
-              child: SizedBox(
-                width: 360,
-                child: loggedIn ? menuOptions(context) : loginForm(),
+      appBar: !loggedIn || selectedIndex == 0
+          ? AppBar(title: Text(loggedIn ? 'Welcome' : 'Cafe Login'))
+          : null,
+      bottomNavigationBar: loggedIn
+          ? BottomNavBar(
+              selectedIndex: selectedIndex,
+              onItemSelected: (index) {
+                setState(() {
+                  if (index == 3) {
+                    loggedIn = false;
+                    selectedIndex = 0;
+                  } else {
+                    selectedIndex = index;
+                  }
+                });
+              },
+            )
+          : null,
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        transitionBuilder: (child, animation) =>
+            FadeTransition(opacity: animation, child: child),
+        child: !loggedIn
+            ? _centered(loginForm(), 'login')
+            : selectedIndex == 0
+            ? _centered(menuOptions(context), 'home')
+            : selectedIndex == 1
+            ? const MenuPage(key: ValueKey('menu'))
+            : Scaffold(
+                key: const ValueKey('cv'),
+                body: CvPage(onBack: () => setState(() => selectedIndex = 0)),
               ),
-            ),
-          ),
-        ),
+      ),
+    );
+  }
+
+  Widget _centered(Widget child, String key) {
+    return Center(
+      key: ValueKey(key),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: SizedBox(width: 360, child: child),
       ),
     );
   }
@@ -120,21 +150,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const MenuPage(),
-                transitionsBuilder: (
-                  context,
-                  animation,
-                  secondaryAnimation,
-                  child,
-                ) => FadeTransition(opacity: animation, child: child),
-                transitionDuration: const Duration(milliseconds: 350),
-                reverseTransitionDuration: const Duration(milliseconds: 350),
-              ),
-            ),
+            onPressed: () => setState(() => selectedIndex = 1),
             child: const Text('Cafe Menu'),
           ),
         ),
@@ -142,29 +158,16 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    Scaffold(
-                      body: CvPage(onBack: () => Navigator.pop(context)),
-                    ),
-                transitionsBuilder: (
-                  context,
-                  animation,
-                  secondaryAnimation,
-                  child,
-                ) => FadeTransition(opacity: animation, child: child),
-                transitionDuration: const Duration(milliseconds: 350),
-                reverseTransitionDuration: const Duration(milliseconds: 350),
-              ),
-            ),
+            onPressed: () => setState(() => selectedIndex = 2),
             child: const Text('View CV'),
           ),
         ),
         const SizedBox(height: 16),
         TextButton(
-          onPressed: () => setState(() => loggedIn = false),
+          onPressed: () => setState(() {
+            loggedIn = false;
+            selectedIndex = 0;
+          }),
           child: const Text('Log out'),
         ),
       ],

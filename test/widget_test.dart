@@ -18,6 +18,12 @@ void main() {
     await tester.enterText(find.byType(TextField).last, 'password');
     await tester.tap(find.text('Log in'));
     await tester.pumpAndSettle();
+    expect(find.text('Hello, Asad!'), findsOneWidget);
+    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('Menu'), findsOneWidget);
+    expect(find.text('CV'), findsOneWidget);
+    expect(find.text('Logout'), findsOneWidget);
+
     await tester.tap(find.text('Cafe Menu'));
     await tester.pumpAndSettle();
 
@@ -31,5 +37,17 @@ void main() {
     await tester.pump();
 
     expect(find.text('Your order is confirmed!'), findsOneWidget);
+
+    await tester.tap(find.text('CV'));
+    await tester.pumpAndSettle();
+    expect(find.text('My CV'), findsOneWidget);
+
+    await tester.tap(find.text('Home'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hello, Asad!'), findsOneWidget);
+
+    await tester.tap(find.text('Logout'));
+    await tester.pumpAndSettle();
+    expect(find.text('Cafe Login'), findsOneWidget);
   });
 }
