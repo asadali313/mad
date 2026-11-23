@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'bottom_nav_bar.dart';
 import 'cv.dart';
 import 'menu.dart';
+import 'tile_list_page.dart';
 
 void main() => runApp(const CafeApp());
 
@@ -160,6 +161,21 @@ class _LoginPageState extends State<LoginPage> {
           child: OutlinedButton(
             onPressed: () => setState(() => selectedIndex = 2),
             child: const Text('View CV'),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TileListPage(),
+                ),
+              );
+            },
+            child: const Text('Tile List'),
           ),
         ),
         const SizedBox(height: 16),
